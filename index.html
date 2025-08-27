@@ -10,5 +10,21 @@
   <p>Please Click!</p>
   <p><a href="https://webhook.site/ea0e799a-b70e-47c9-baae-05982239a809">Webhook.siteへ</a></p>
   <p>Yeah</p>
+  <script>
+(function(){
+  var endpoint = "/log";
+  var ref = document.referrer || "";        // ここに“検索結果やリンク元”が入る場合がある
+  var url = endpoint
+    + "?u=" + encodeURIComponent(location.href)   // 開かれた自ページのURL
+    + "&r=" + encodeURIComponent(ref);            // 本来の流入元（あれば）
+
+  // 互換性の高い画像ビーコン
+  var img = new Image();
+  img.src = url;
+
+  // ページ離脱時も確実に飛ばしたいなら追加（任意）
+  // navigator.sendBeacon(endpoint, JSON.stringify({u: location.href, r: ref}));
+})();
+</script>
 </body>
 </html>
