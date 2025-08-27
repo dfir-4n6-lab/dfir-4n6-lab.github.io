@@ -1,24 +1,15 @@
-// Cloudflare Pages Functions: /functions/log.ts → /log で実行
 export const onRequest: PagesFunction = async (ctx) => {
   const req = ctx.request;
   const h = req.headers;
-
-  // Cloudflareが付与するクライアントIP（最優先）
-  const cfIp = h.get("CF-Connecting-IP"); // 公式ドキュメント
-  // 互換ヘッダも一応見ておく
-  const xff  = h.get("X-Forwarded-For");
-  const ua   = h.get("User-Agent") || "-";
-  const ref  = h.get("Referer") || "-";
-
-  // 開かれたURL（クエリ ?u=）
   const url = new URL(req.url);
-  const opened = url.searchParams.get("u") || "-";
 
-  // タイムスタンプはUTCで
+  const cfIp = h.get("CF-Connecting-IP") || h.get("X-Forwarded-For") || "unknown";
+  const ua   = h.get("User-Agent") || "-";
+  const refH = h.get("Referer") || "-";               // ヘッダ由来（発火元＝あなたのページになる）
+  const opened = url.searchParams.get("u") || "-";    // 開かれたページ
+  const refQ = url.searchParams.get("r") || "";       // document.referrer由来（本当の流入元候補）
   const when = new Date().toISOString();
 
-  // ダッシュボード > Workers & Pages > Pages > 対象デプロイ > Functions で見える
-  console.log(`${when} IP=${cfIp || xff || "unknown"} UA="${ua}" Referer="${ref}" URL="${opened}"`);
-
+  console.log(`${when} IP=${cfIp} UA="${ua}" RefHeader="${refH}" URL="${opened}" ReferrerParam="${refQ}"`);
   return new Response("ok", { status: 200 });
 };
