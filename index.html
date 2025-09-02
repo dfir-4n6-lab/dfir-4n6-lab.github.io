@@ -2,29 +2,49 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8" />
-  <title>アクセスログ実験ページ</title>
-  <meta name="description" content="Cloudflare Pages でアクセスログを確認するテストページ" />
+  <title>日々のちょっとした雑記と小さな工夫</title>
+  <meta name="description" content="日常の中で見つけた小さな工夫や気づきを気ままに書き留める、肩の力を抜いた雑記ページです。" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=" />
 </head>
 <body>
-  <h1>アクセスログ実験</h1>
-  <p>このページを検索から開くと、リファラがログに記録されます。</p>
+  <main>
+    <h1>日々のちょっとした雑記と小さな工夫</h1>
+    <p>
+      このページでは、毎日の生活の中で見つけた小さな気づきや、ちょっと役立つ工夫を気ままに残しています。
+      散歩で見かけた風景のこと、季節ごとの楽しみ方、台所で試してみた小さなアイデアなど、
+      決まったテーマに縛られず、ゆるやかに更新していくつもりです。
+    </p>
+    <p>
+      長い読み物というよりは、一息ついたときに眺められる短めのメモが中心。
+      たまたま開いた方にも「へえ」と思ってもらえるような、ほどよい内容を心がけています。
+      その時々で気になった話題を少しずつ書き足しながら、のんびり育てていければと思います。
+    </p>
+    <p>
+      近いうちに散歩や季節の行事の記録、簡単な日用品のレビューなども加える予定です。
+      更新頻度は高くありませんが、気が向いたときにゆっくりと続けます。
+    </p>
+    <ul>
+      <li>最終更新日：2025-09-02</li>
+      <li>内容：日常のメモ、ちょっとした工夫や記録</li>
+      <li>形式：短文メモ中心、気ままに更新</li>
+    </ul>
+  </main>
 
-  <!-- ここにスクリプトを入れる -->
+  <!-- ビーコン（目的を悟られないよう最小・無言実装） -->
   <script>
-  (function(){
-    var endpoint = "/log";
-    var ref = document.referrer || "";        // ここに“検索結果やリンク元”が入る場合がある
-    var url = endpoint
-      + "?u=" + encodeURIComponent(location.href)   // 開かれた自ページのURL
-      + "&r=" + encodeURIComponent(ref);            // 本来の流入元（あれば）
-
-    // 互換性の高い画像ビーコン
-    var img = new Image();
-    img.src = url;
-
-    // ページ離脱時も確実に飛ばしたいなら追加（任意）
-    // navigator.sendBeacon(endpoint, JSON.stringify({u: location.href, r: ref}));
-  })();
+    (function () {
+      try {
+        var u = "/log?u=" + encodeURIComponent(location.href);
+        var r = (document && document.referrer) ? "&r=" + encodeURIComponent(document.referrer) : "";
+        var img = new Image();
+        img.src = u + r;
+      } catch (e) { /* noop */ }
+    })();
   </script>
+
+  <noscript>
+    <img src="/log?u=/noscript" alt="" width="1" height="1" style="border:0; opacity:0;" />
+  </noscript>
 </body>
 </html>
